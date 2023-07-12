@@ -1,23 +1,30 @@
-import { Image, ScrollView, Text, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import React from 'react';
+import { Track } from 'react-native-track-player';
+import { TrackProps } from '../../App';
 import { styles } from './styles';
 
-const List: React.FC = ({
-  data,
-  title
-}) => {
-  const renderItems = (item) => {
+type ListProps = {
+  data: TrackProps[];
+  title: string;
+  onPressItem: (item: Track) => {};
+};
+
+const List: React.FC<ListProps> = ({data, title, onPressItem}) => {
+  const renderItems = (item: Track | TrackProps) => {
     return (
-      <View style={styles.cardItemContainer}>
+      <TouchableOpacity
+        onPress={() => onPressItem(item)}
+        style={styles.cardItemContainer}>
         <Image
           style={styles.cardArtwork}
-          source={{ uri: item.artwork }}
-          resizeMode='contain'
+          source={{uri: String(item?.artwork)}}
+          resizeMode="contain"
         />
         <Text style={styles.cardItemArtist}>{item.artist}</Text>
         <Text style={styles.cardItemTitle}>{item.title}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -25,7 +32,7 @@ const List: React.FC = ({
     <View style={styles.musicListContainer}>
       <Text style={styles.listTitle}>{title}</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {data.map((item) => {
+        {data.map(item => {
           return renderItems(item);
         })}
       </ScrollView>
