@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     justifyContent: 'space-around',
   },
+  cardItemContainerPlaying: {
+    backgroundColor: 'rgba(0,0,0,0.9)',
+  },
   cardArtwork: {
     width: 110,
     height: 120,

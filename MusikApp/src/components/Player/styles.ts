@@ -36,4 +36,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
+  timeText: {
+    color: colors.white,
+  },
 });

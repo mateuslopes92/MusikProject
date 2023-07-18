@@ -18,7 +18,9 @@ export type TrackProps = {
 
 const App: React.FC = () => {
   const [tracks, setTracks] = useState<TrackProps[]>([] as TrackProps[]);
-  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<Track | TrackProps | null>(
+    null,
+  );
 
   const onTrackItemPress = async (track: Track) => {
     await TrackPlayer.pause();
@@ -27,12 +29,7 @@ const App: React.FC = () => {
   };
 
   const playNextPrev = async (prevOrNext: 'prev' | 'next') => {
-    const currentTrackId = await TrackPlayer.getCurrentTrack();
-    console.log(currentTrackId, prevOrNext);
-    if (!currentTrackId) {
-      return;
-    }
-    const trkIndex = tracks.findIndex(trk => trk.id === currentTrackId);
+    const trkIndex = tracks.findIndex(trk => trk.id === selectedTrack?.id);
 
     if (prevOrNext === 'next' && trkIndex < tracks.length - 1) {
       onTrackItemPress(tracks[trkIndex + 1]);
@@ -56,20 +53,31 @@ const App: React.FC = () => {
     await TrackPlayer.setupPlayer();
   };
 
+  const stopPlayer = async () => {
+    await TrackPlayer.pause();
+    await TrackPlayer.reset();
+  };
+
   useEffect(() => {
     getTracks();
     setUpPlayer();
+
+    // return () => {
+    //   stopPlayer();
+    // };
   }, []);
 
   return (
     <Container>
-      <ScrollView style={{paddingHorizontal: 18}}>
+      <ScrollView style={{ paddingHorizontal: 18 }}>
         <StatusBar barStyle="light-content" />
         <Header />
-        <List data={tracks} title="Featured" onPressItem={onTrackItemPress} />
-        <List data={tracks} title="New" onPressItem={onTrackItemPress} />
+        <List data={tracks} title="Featured" onPressItem={onTrackItemPress} selectedTrack={selectedTrack} />
+        <List data={tracks} title="New" onPressItem={onTrackItemPress} selectedTrack={selectedTrack} />
       </ScrollView>
-      <Player track={selectedTrack} playNextPrev={playNextPrev} />
+      {/* {selectedTrack && ( */}
+        <Player track={selectedTrack} playNextPrev={playNextPrev} />
+      {/* )} */}
     </Container>
   );
 };

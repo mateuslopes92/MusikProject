@@ -9,14 +9,16 @@ type ListProps = {
   data: TrackProps[];
   title: string;
   onPressItem: (item: Track) => {};
+  selectedTrack: TrackProps | Track;
 };
 
-const List: React.FC<ListProps> = ({data, title, onPressItem}) => {
+const List: React.FC<ListProps> = ({data, title, onPressItem, selectedTrack}) => {
   const renderItems = (item: Track | TrackProps) => {
+    const isPlaying = selectedTrack === item;
     return (
       <TouchableOpacity
         onPress={() => onPressItem(item)}
-        style={styles.cardItemContainer}>
+        style={[styles.cardItemContainer, isPlaying && styles.cardItemContainerPlaying]}>
         <Image
           style={styles.cardArtwork}
           source={{uri: String(item?.artwork)}}
