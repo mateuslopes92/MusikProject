@@ -8,6 +8,7 @@ import TrackPlayer, {
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Slider from '@react-native-community/slider';
+import { secondsToHHMMSS } from '../../services/AppPlayerService';
 import { styles } from './styles';
 
 type PlayerProps = {
@@ -15,8 +16,8 @@ type PlayerProps = {
   playNextPrev: (prevOrNext: 'prev' | 'next') => {};
 };
 
-const Player: React.FC<PlayerProps> = ({track, playNextPrev}) => {
-  const [isPlaying, setPlaying] = useState(true);
+const Player: React.FC<PlayerProps> = ({ track, playNextPrev }) => {
+  const [isPlaying, setPlaying] = useState(false);
   const progress = useProgress();
   const [duration, setDuration] = useState(0);
 
@@ -55,15 +56,24 @@ const Player: React.FC<PlayerProps> = ({track, playNextPrev}) => {
       <Text style={styles.trackTitle}>{track?.title}</Text>
       <Text style={styles.trackArtist}>{track?.artist}</Text>
       <View style={styles.sliderContainer}>
+        <Text style={styles.timeText}>
+          {secondsToHHMMSS(Math.floor(progress.position || 0))}
+        </Text>
         <Slider
-          style={{width: '90%', transform: [{scaleX: 0.7}, {scaleY: 0.7}]}}
+          style={{
+            width: '90%',
+            transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
+            marginHorizontal: -30
+          }}
           minimumValue={0}
           maximumValue={duration}
           minimumTrackTintColor="#52527a"
           maximumTrackTintColor="#52527a"
           thumbTintColor="#52527a"
           value={progress.position}
+          onValueChange={value => TrackPlayer.seekTo(value)}
         />
+        <Text style={styles.timeText}>{secondsToHHMMSS(duration || 0)}</Text>
       </View>
       <View style={styles.controlContainer}>
         <Icon
