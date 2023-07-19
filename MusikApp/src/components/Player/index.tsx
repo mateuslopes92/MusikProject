@@ -61,9 +61,8 @@ const Player: React.FC<PlayerProps> = ({ track, playNextPrev }) => {
         </Text>
         <Slider
           style={{
-            width: '90%',
+            width: '73%',
             transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
-            marginHorizontal: -30
           }}
           minimumValue={0}
           maximumValue={duration}

@@ -16,7 +16,13 @@ export type TrackProps = {
   artwork: string;
 };
 
+type DataProps = {
+  featured: TrackProps[];
+  new: TrackProps[];
+};
+
 const App: React.FC = () => {
+  const [data, setData] = useState<DataProps>({} as DataProps);
   const [tracks, setTracks] = useState<TrackProps[]>([] as TrackProps[]);
   const [selectedTrack, setSelectedTrack] = useState<Track | TrackProps | null>(
     null,
@@ -43,7 +49,10 @@ const App: React.FC = () => {
     try {
       const response = await api.get('/all-tracks');
 
-      setTracks(response.data);
+      setData(response.data);
+      Object.keys(response.data).map(key => {
+        setTracks([...response.data[key]]);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -53,18 +62,9 @@ const App: React.FC = () => {
     await TrackPlayer.setupPlayer();
   };
 
-  const stopPlayer = async () => {
-    await TrackPlayer.pause();
-    await TrackPlayer.reset();
-  };
-
   useEffect(() => {
     getTracks();
     setUpPlayer();
-
-    // return () => {
-    //   stopPlayer();
-    // };
   }, []);
 
   return (
@@ -72,12 +72,19 @@ const App: React.FC = () => {
       <ScrollView style={{ paddingHorizontal: 18 }}>
         <StatusBar barStyle="light-content" />
         <Header />
-        <List data={tracks} title="Featured" onPressItem={onTrackItemPress} selectedTrack={selectedTrack} />
-        <List data={tracks} title="New" onPressItem={onTrackItemPress} selectedTrack={selectedTrack} />
+        {Object.keys(data).map(key => {
+          return (
+            <List
+              key={key}
+              data={data[key]}
+              title={key}
+              onPressItem={onTrackItemPress}
+              selectedTrack={selectedTrack}
+            />
+          );
+        })}
       </ScrollView>
-      {/* {selectedTrack && ( */}
-        <Player track={selectedTrack} playNextPrev={playNextPrev} />
-      {/* )} */}
+      <Player track={selectedTrack} playNextPrev={playNextPrev} />
     </Container>
   );
 };
