@@ -6,23 +6,35 @@ const routes = new Router();
 const trackList = [
   {
     id: 1,
-    url: '',
     title: 'Vibe',
     artist: 'Matt Flow',
     artwork: 'http://localhost:3000/assets/artworks/Vibe.png',
     filePath: './assets/mp3/Vibe.mp3',
     url: 'http://localhost:3000/assets/mp3/Vibe.mp3',
-    duration: 166
   },
   {
     id: 2,
-    url: '',
     title: 'Mi Vida',
     artist: 'Matt Flow',
     artwork: 'http://localhost:3000/assets/artworks/MiVida.png',
     filePath: './assets/mp3/MiVida.mp3',
     url: 'http://localhost:3000/assets/mp3/MiVida.mp3',
-    duration: 166
+  },
+  {
+    id: 3,
+    title: 'Maior que o teto',
+    artist: 'Matt Flow',
+    artwork: 'http://localhost:3000/assets/artworks/Maiorqueoteto.png',
+    filePath: './assets/mp3/Maiorqueoteto.mp3',
+    url: 'http://localhost:3000/assets/mp3/Maiorqueoteto.mp3',
+  },
+  {
+    id: 4,
+    title: 'Mercedes Benz',
+    artist: 'Matt Flow',
+    artwork: 'http://localhost:3000/assets/artworks/Broken.png',
+    filePath: './assets/mp3/MercedesBenz.mp3',
+    url: 'http://localhost:3000/assets/mp3/MercedesBenz.mp3',
   },
 ];
 
@@ -65,7 +77,10 @@ routes.get('/track/:id', function (req, res) {
 
 // get track by id
 routes.get('/all-tracks', function (req, res) {
-  return res.json(trackList);
+  return res.json({
+    featured: trackList,
+    new: trackList,
+  });
 });
 
 export default routes;

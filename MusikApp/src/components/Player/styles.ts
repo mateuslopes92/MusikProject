@@ -38,5 +38,6 @@ export const styles = StyleSheet.create({
   },
   timeText: {
     color: colors.white,
+    marginHorizontal: 4,
   },
 });
